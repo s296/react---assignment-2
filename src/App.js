@@ -1,35 +1,53 @@
 import React from 'react';
-import logo from './logo.svg';
-// import './App.css';
-
-import UserInput from './UserInput/UserInput.js'
-import UserOutput from './UserOutput/UserOutput.js'
+import Validation from './ValidationComponent/ValidationComponent.js';
+import Char  from './Char/Char';
 
 class App extends React.Component {
+  
   state = {
-    username : 'supermax'
+    userInput: ''
   }
 
-  usernameChangeHandler = (event) => {
-    this.setState({username : event.target.value})   // u can't change the name { target , value} these both are predefined
+  inputChangeHandler = (event) => {
+    this.setState({userInput : event.target.value});
   }
 
-  render() {
+  deleteCharHandler = (index) => {
+    const text = this.state.userInput.split('');
+    text.splice(index,1);
+    const updatedtext = text.join('');
+    this.setState({userInput : updatedtext});
+  }
+
+    render() {
+      const charList = this.state.userInput.split('').map((ch,index) => {
+          return <Char 
+          character={ch} 
+          key={index}
+          clicked={() => this.deleteCharHandler(index)}  />;
+      });
+    
     return (
       <div className = "App">
-        <ol>
+        <ol> 
           <li>hi</li>
           <li>shubham</li>
         </ol>
-        <UserInput 
-          changed={this.usernameChangeHandler}
-          currentName={this.state.username} />
-        <UserOutput userName={this.state.username}/>
-        <UserOutput userName="dev"/>
-        <UserOutput userName="ram"/> 
+        <p>hint: </p>
+        <hr/>
+        <input  
+          type="text"
+          value={this.state.userInput}
+          onChange={this.inputChangeHandler}
+           />
+
+          <p>{this.state.userInput}</p>
+          
+          <Validation  inputLength={this.state.userInput.length}/> 
+          {charList}
       </div>
 
-    )
+    )   
   }
 }
 
